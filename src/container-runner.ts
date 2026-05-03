@@ -260,6 +260,9 @@ async function buildContainerArgs(
   });
   if (onecliApplied) {
     logger.info({ containerName }, 'OneCLI gateway config applied');
+    // SDK 0.2.0 sets SSL_CERT_FILE but Node.js (Claude Code agent) requires
+    // NODE_EXTRA_CA_CERTS for additional CA trust. Mirror the SDK mount path.
+    args.push('-e', 'NODE_EXTRA_CA_CERTS=/tmp/onecli-combined-ca.pem');
   } else {
     logger.warn(
       { containerName },
